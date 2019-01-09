@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 684470f0233d5ed4f8e43aae4ebc361b, type: 3}
+  m_Name: AdsConfig
+  m_EditorClassIdentifier: 
+  service: 0
+  debug: 1
+  initStart: 0
+  gameID: 1586872
+  bannerID: ca-app-pub-2340595514266676/9489281941
+  interstitialID: ca-app-pub-2340595514266676/3130923006
+  marginY: 5
+  adPosition: 0
