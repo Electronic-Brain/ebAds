@@ -1,13 +1,12 @@
 ﻿/* Class : AdManager
  * For initialize AD and show Ad* */
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Advertisements;
 using GoogleMobileAds.Api;
 
 public class AdManager : MonoBehaviour
 {
+    #region Variables
     public AdConfiguration configuration;
 
     public BannerView bannerView;
@@ -16,32 +15,44 @@ public class AdManager : MonoBehaviour
     private bool isInitialized = false;
 
     public static AdManager instance;
+    #endregion
 
     // Use this for initialization
     void Start()
     {
+        //Singleton
         if (instance == null) instance = this;
         else Destroy(this);
 
-        if (configuration.initStart)
+        if (!configuration.initStart)
         {
             if (configuration.service == AdConfiguration.adServices.GoogleAdmob)
             {
-                GoogleAds.initService();
+                GoogleAds.initService(); //Initialize Google Ads service
 
             }
             else if (configuration.service == AdConfiguration.adServices.UnityAds)
             {
-                UnityAds.initService();
+                UnityAds.initService(); //Initialize Unity Ads service
             }
         }
-        //TestAd();
+        //ExampleFunction();
     }
 
-    void TestAd()
+    /// <summary>
+    /// Example function for Developer. 
+    /// </summary>
+    void ExampleFunction()
     {
-        UnityAds.initService();
-        UnityAds.ShowAds("video");
+        //Unity Ads
+        UnityAds.initService(); //Initialize Unity Ads service if service hadn't initialize on start. For Initialize on Start, follow doc.
+        UnityAds.ShowAds("video"); // Param string is Placement ID. You can find this on your Unity Ads Dashboard https://operate.dashboard.unity3d.com
+
+        //Google Ads
+        GoogleAds.initService(); //Initialize Google Ads service if service hadn't initialize on start. For Initialize on Start, follow doc.
+        GoogleAds.ShowBannerAd(); //Show Banner Ad. Initialize if not initialized on Start
+        GoogleAds.HideBanner(); //Hide Banner
+        GoogleAds.RequestInterstitialAd(); //Show Interstitial(Video)Ad as well as request it. 
     }
 
     public class GoogleAds
@@ -66,6 +77,7 @@ public class AdManager : MonoBehaviour
                 instance.isInitialized = true;
             }
         }
+
         /// <summary>
         /// For Showing Banner Ad, also requsting Ad
         /// </summary>
@@ -82,6 +94,7 @@ public class AdManager : MonoBehaviour
 
             instance.bannerView.Show();// show Banner Ad
         }
+
         /// <summary>
         /// For Hiding Banner Ad
         /// </summary>
@@ -105,6 +118,7 @@ public class AdManager : MonoBehaviour
 
             ShowInterstitialAd();
         }
+
         /// <summary>
         /// Show Video to end user
         /// </summary>
@@ -112,7 +126,8 @@ public class AdManager : MonoBehaviour
         {
             if (instance.interstitialAd.IsLoaded())
                 instance.interstitialAd.Show();
-            else Debug.LogWarning("Interstitial Ad doesn't loaded properly");
+            else                            
+                if (instance.configuration.debug) Debug.LogWarning("Interstitial Ad doesn't loaded properly");
         }
     }
 
@@ -123,7 +138,10 @@ public class AdManager : MonoBehaviour
         /// </summary>
         public static void initService()
         {
-            Advertisement.Initialize(instance.configuration.gameID);
+            if (!instance.configuration.initStart)
+            {
+                Advertisement.Initialize(instance.configuration.gameID);
+            }
         }
 
         /// <summary>
@@ -145,6 +163,7 @@ public class AdManager : MonoBehaviour
             Advertisement.Show(placementID, options);
 
         }
+
         /// <summary>
         /// Show Result of video
         /// </summary>
